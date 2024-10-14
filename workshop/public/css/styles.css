@@ -5,13 +5,13 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f0f8; /* Rose clair */
+    background-color: #e3f2fd; /* Bleu clair */
     color: #333;
 }
 
 /* En-tête */
 header {
-    background-color: #d5006d; /* Rose vif */
+    background-color: #1e88e5; /* Bleu vif */
     color: white;
     padding: 20px;
     text-align: center;
@@ -45,21 +45,21 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    color: #ffeef8; /* Couleur rose très clair au survol */
+    color: #90caf9; /* Bleu très clair au survol */
 }
 
 /* Sections principales */
 section {
     margin: 20px;
     padding: 20px;
-    background-color: #ffeef8; /* Rose très clair */
-    border: 1px solid #d5006d; /* Bordure rose vif */
+    background-color: #bbdefb; /* Bleu très clair */
+    border: 1px solid #1e88e5; /* Bordure bleu vif */
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    color: #d5006d; /* Rose vif */
+    color: #1e88e5; /* Bleu vif */
     font-size: 2em;
     margin-top: 0;
 }
@@ -69,7 +69,7 @@ h2 {
     display: inline-block;
     padding: 10px 20px;
     margin-top: 10px;
-    background-color: #d5006d; /* Rose vif */
+    background-color: #1e88e5; /* Bleu vif */
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -77,12 +77,12 @@ h2 {
 }
 
 .button:hover {
-    background-color: #c4005a; /* Rose foncé au survol */
+    background-color: #1565c0; /* Bleu foncé au survol */
 }
 
 /* Pied de page */
 footer {
-    background-color: #d5006d; /* Rose vif */
+    background-color: #1e88e5; /* Bleu vif */
     color: white;
     text-align: center;
     padding: 15px;
@@ -93,7 +93,7 @@ footer {
 
 /* Liens */
 a {
-    color: #d5006d; /* Rose vif */
+    color: #1e88e5; /* Bleu vif */
 }
 
 a:hover {
@@ -124,7 +124,7 @@ ul li {
 .article {
     margin-bottom: 20px;
     padding: 15px;
-    border: 1px solid #d5006d; /* Bordure rose vif */
+    border: 1px solid #1e88e5; /* Bordure bleu vif */
     border-radius: 10px;
     background-color: #fff; /* Fond blanc pour les articles */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -140,16 +140,16 @@ ul li {
 }
 
 .article a {
-    color: #d5006d; /* Rose vif */
+    color: #1e88e5; /* Bleu vif */
     text-decoration: underline;
 }
 
 .category {
     margin-bottom: 15px;
     padding: 10px;
-    border: 1px solid #d5006d; /* Bordure rose vif */
+    border: 1px solid #1e88e5; /* Bordure bleu vif */
     border-radius: 8px;
-    background-color: #ffeef8; /* Fond rose très clair */
+    background-color: #bbdefb; /* Fond bleu très clair */
 }
 
 .category h3 {
@@ -170,7 +170,7 @@ ul li {
 #new-topic-form {
     background-color: #ffffff; /* Fond blanc pour le formulaire */
     padding: 20px;
-    border: 1px solid #d5006d; /* Bordure rose vif */
+    border: 1px solid #1e88e5; /* Bordure bleu vif */
     border-radius: 8px; /* Coins arrondis */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
     margin-bottom: 30px;
@@ -186,7 +186,7 @@ ul li {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #d5006d; /* Couleur rose vif */
+    color: #1e88e5; /* Couleur bleu vif */
 }
 
 /* Champs de saisie */
@@ -195,7 +195,7 @@ ul li {
     width: calc(100% - 24px); /* Réduire la largeur pour éviter le débordement */
     padding: 12px; /* Rembourrage pour le confort */
     margin-bottom: 15px;
-    border: 1px solid #d5006d; /* Bordure rose vif */
+    border: 1px solid #1e88e5; /* Bordure bleu vif */
     border-radius: 4px;
     font-size: 16px; /* Taille de police */
     box-sizing: border-box; /* Inclure le rembourrage et la bordure dans la largeur totale */
@@ -203,13 +203,13 @@ ul li {
 
 #new-topic-form input[type="text"]:focus,
 #new-topic-form textarea:focus {
-    border-color: #c4005a; /* Couleur de la bordure au focus */
+    border-color: #1565c0; /* Couleur de la bordure au focus */
     outline: none; /* Suppression du contour par défaut */
 }
 
 /* Styles pour le bouton */
 #new-topic-form button {
-    background-color: #d5006d; /* Rose vif */
+    background-color: #1e88e5; /* Bleu vif */
     color: white;
     padding: 12px 20px; /* Augmentation du rembourrage pour le bouton */
     border: none;
@@ -221,6 +221,15 @@ ul li {
 }
 
 #new-topic-form button:hover {
-    background-color: #b00049; /* Une teinte plus sombre au survol */
+    background-color: #1565c0; /* Une teinte plus sombre au survol */
 }
 
+/* styles.css */
+
+/* Logo dans le header */
+.logo {
+    display: block;
+    margin: 10px auto;
+    max-width: 150px; /* Ajustez cette valeur selon la taille de votre logo */
+    height: auto;
+}
