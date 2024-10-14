@@ -1,0 +1,226 @@
+/* styles.css */
+
+/* Corps de la page */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f0f8; /* Rose clair */
+    color: #333;
+}
+
+/* En-tête */
+header {
+    background-color: #d5006d; /* Rose vif */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+/* Navigation */
+nav {
+    margin-top: 15px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #ffeef8; /* Couleur rose très clair au survol */
+}
+
+/* Sections principales */
+section {
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffeef8; /* Rose très clair */
+    border: 1px solid #d5006d; /* Bordure rose vif */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #d5006d; /* Rose vif */
+    font-size: 2em;
+    margin-top: 0;
+}
+
+/* Styles pour les boutons */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #d5006d; /* Rose vif */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #c4005a; /* Rose foncé au survol */
+}
+
+/* Pied de page */
+footer {
+    background-color: #d5006d; /* Rose vif */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Liens */
+a {
+    color: #d5006d; /* Rose vif */
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Autres styles pour améliorer l'apparence */
+ul {
+    padding-left: 20px;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+.content-section {
+    margin-bottom: 20px;
+}
+
+/* Ajout de styles de réactivité */
+@media (max-width: 600px) {
+    nav ul li {
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+
+.article {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #d5006d; /* Bordure rose vif */
+    border-radius: 10px;
+    background-color: #fff; /* Fond blanc pour les articles */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.article h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.article p {
+    margin: 10px 0;
+}
+
+.article a {
+    color: #d5006d; /* Rose vif */
+    text-decoration: underline;
+}
+
+.category {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #d5006d; /* Bordure rose vif */
+    border-radius: 8px;
+    background-color: #ffeef8; /* Fond rose très clair */
+}
+
+.category h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.forum-topics {
+    list-style-type: none;
+    padding: 0;
+}
+
+.forum-topics li {
+    margin: 10px 0;
+}
+
+/* Styles pour le formulaire de création de sujet */
+#new-topic-form {
+    background-color: #ffffff; /* Fond blanc pour le formulaire */
+    padding: 20px;
+    border: 1px solid #d5006d; /* Bordure rose vif */
+    border-radius: 8px; /* Coins arrondis */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    margin-bottom: 30px;
+    transition: box-shadow 0.3s ease; /* Transition pour l'ombre */
+}
+
+#new-topic-form:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée au survol */
+}
+
+/* Styles pour les étiquettes */
+#new-topic-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #d5006d; /* Couleur rose vif */
+}
+
+/* Champs de saisie */
+#new-topic-form input[type="text"],
+#new-topic-form textarea {
+    width: calc(100% - 24px); /* Réduire la largeur pour éviter le débordement */
+    padding: 12px; /* Rembourrage pour le confort */
+    margin-bottom: 15px;
+    border: 1px solid #d5006d; /* Bordure rose vif */
+    border-radius: 4px;
+    font-size: 16px; /* Taille de police */
+    box-sizing: border-box; /* Inclure le rembourrage et la bordure dans la largeur totale */
+}
+
+#new-topic-form input[type="text"]:focus,
+#new-topic-form textarea:focus {
+    border-color: #c4005a; /* Couleur de la bordure au focus */
+    outline: none; /* Suppression du contour par défaut */
+}
+
+/* Styles pour le bouton */
+#new-topic-form button {
+    background-color: #d5006d; /* Rose vif */
+    color: white;
+    padding: 12px 20px; /* Augmentation du rembourrage pour le bouton */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* Augmentation de la taille de la police */
+    transition: background-color 0.3s ease; /* Transition pour le fond */
+    width: 100%; /* Bouton plein largeur */
+}
+
+#new-topic-form button:hover {
+    background-color: #b00049; /* Une teinte plus sombre au survol */
+}
+

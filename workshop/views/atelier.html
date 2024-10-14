@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanWeb - Atelier</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Styles pour la pop-up */
+        #popup {
+            display: none; /* Cacher par défaut */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            border: 2px solid #d5006d; /* Rose vif */
+            border-radius: 10px;
+            z-index: 1000;
+        }
+        #popup h3 {
+            margin-top: 0;
+        }
+        #close-popup {
+            cursor: pointer;
+            color: #d5006d; /* Rose vif */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header avec la navigation -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="article.html">Articles</a></li>
+                <li><a href="forum.html">Forum</a></li>
+                <li><a href="atelier.html">Atelier</a></li>
+            </ul>
+        </nav>        
+    </header>
+
+    <!-- Section Atelier -->
+    <section id="atelier" class="content-section">
+        <h1>Ateliers de Sensibilisation</h1>
+        <p>Participez à nos ateliers interactifs pour apprendre à détecter les arnaques et le phishing en ligne.</p>
+
+        <h2>Objectifs des Ateliers</h2>
+        <ul>
+            <li>Comprendre les différentes formes de phishing et d'escroqueries.</li>
+            <li>Apprendre à identifier les signes d'une arnaque.</li>
+            <li>Développer des compétences pour signaler des contenus nuisibles.</li>
+            <li>Partagez vos expériences et posez vos questions.</li>
+        </ul>
+
+        <h2>Nos Ateliers à Venir</h2>
+        <div class="atelier-event">
+            <h3>Détecter le Phishing : Atelier Pratique</h3>
+            <p><strong>Date :</strong> 15 Novembre 2024</p>
+            <p><strong>Heure :</strong> 14h00 - 16h00</p>
+            <p>Un atelier pratique pour apprendre à identifier les emails et les sites Web frauduleux.</p>
+            <a href="#" class="button" id="register-button-1">Inscrivez-vous</a>
+        </div>
+
+        <div class="atelier-event">
+            <h3>Arnaques en Ligne : Comment s'en Protéger</h3>
+            <p><strong>Date :</strong> 22 Novembre 2024</p>
+            <p><strong>Heure :</strong> 14h00 - 16h00</p>
+            <p>Apprenez les meilleures pratiques pour éviter les arnaques en ligne.</p>
+            <a href="#" class="button" id="register-button-2">Inscrivez-vous</a>
+        </div>
+    </section>
+
+    <!-- Pop-up d'inscription -->
+    <div id="popup">
+        <h3>Inscription réussie !</h3>
+        <p>Vous êtes inscrits à l'atelier.</p>
+        <span id="close-popup">Fermer</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 CleanWeb. WORKSHOP 2024 - Aymeric, Anthony, Flavien et Juliette.</p>
+    </footer>
+
+
+    <script src="/js/app.js"></script>
+</body>
+</html>
