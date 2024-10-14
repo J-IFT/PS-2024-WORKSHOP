@@ -1,4 +1,4 @@
-# PS-2023-WORKSHOP
+# PS-2024-WORKSHOP
 
 *PS = Projet Scolaire*
 
