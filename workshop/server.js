@@ -25,9 +25,19 @@ app.get('/forum.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'forum.html'));
 });
 
-// Route pour la page des atelirs
+// Route pour la page des ateliers
 app.get('/atelier.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'atelier.html'));
+});
+
+// Route pour la page des ateliers phishing
+app.get('/phishing.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'phishing.html'));
+});
+
+// Route pour la page des ateliers arnaque
+app.get('/arnaque.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'arnaque.html'));
 });
 
 // Lancer le serveur
