@@ -9,12 +9,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fermer la pop-up
     document.getElementById("open-popup-inscrit").addEventListener("click", function() {
-		document.getElementById("popup-inscription").style.display = "nonce"; // Cacher la pop-up
+		document.getElementById("popup-inscription").style.display = "none"; // Cacher la pop-up
         document.getElementById("popup").style.display = "block"; // Afficher la pop-up
     });
 
     // Fermer la pop-up inscrit
     document.getElementById("close-popup").addEventListener("click", function() {
         document.getElementById("popup").style.display = "none"; // Cacher la pop-up
+    });
+	document.getElementById("close-popup-inscription").addEventListener("click", function() {
+		document.getElementById("popup-inscription").style.display = "none"; // Cacher la pop-up
     });
 });
