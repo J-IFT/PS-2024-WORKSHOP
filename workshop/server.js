@@ -55,35 +55,32 @@ const db = new sqlite3.Database('./cleanweb.db', (err) => {
 						db.run(insertThread, [thread.author, thread.title, thread.message], function (err) {
 							if (err) {
 								console.error('Erreur lors de l\'ajout du thread d\'exemple :', err);
-							} else {
-								const threadId = this.lastID; // Récupérer l'ID du thread ajouté
+							}
+						});
+					});
+					// Ajouter des commentaires pour chaque thread avec le champ thread_id
+					const exampleComments = [
+						{ thread_id: 1, author: 'John', message: 'C’est toujours difficile de détecter les emails suspects, il faut être très vigilant.' },
+						{ thread_id: 1, author: 'Sara', message: 'Merci pour ce sujet, je trouve ça vraiment utile. Les signes les plus clairs sont souvent les liens suspects et les pièces jointes inattendues.' },
+						{ thread_id: 1, author: 'Paul', message: 'La plupart du temps, les fautes d’orthographe ou les offres trop alléchantes sont des indices.' },
 
-								// Ajouter des commentaires pour chaque thread avec le champ thread_id
-								const exampleComments = [
-									{ thread_id: 1, author: 'John', message: 'C’est toujours difficile de détecter les emails suspects, il faut être très vigilant.' },
-									{ thread_id: 1, author: 'Sara', message: 'Merci pour ce sujet, je trouve ça vraiment utile. Les signes les plus clairs sont souvent les liens suspects et les pièces jointes inattendues.' },
-									{ thread_id: 1, author: 'Paul', message: 'La plupart du temps, les fautes d’orthographe ou les offres trop alléchantes sont des indices.' },
+						{ thread_id: 2, author: 'Emily', message: 'J\'ai aussi remarqué de nombreuses annonces frauduleuses sur Instagram. C\'est vraiment inquiétant.' },
+						{ thread_id: 2, author: 'Michael', message: 'Faites attention à ne pas cliquer sur ces liens, c’est souvent du phishing.' },
+						{ thread_id: 2, author: 'Laura', message: 'Les réseaux sociaux deviennent de plus en plus infestés par ces arnaques. Un signalement rapide est essentiel.' },
+						{ thread_id: 2, author: 'David', message: 'J\'ai signalé plusieurs annonces de ce type, mais elles réapparaissent souvent sous une autre forme.' },
 
-									{ thread_id: 2, author: 'Emily', message: 'J\'ai aussi remarqué de nombreuses annonces frauduleuses sur Instagram. C\'est vraiment inquiétant.' },
-									{ thread_id: 2, author: 'Michael', message: 'Faites attention à ne pas cliquer sur ces liens, c’est souvent du phishing.' },
-									{ thread_id: 2, author: 'Laura', message: 'Les réseaux sociaux deviennent de plus en plus infestés par ces arnaques. Un signalement rapide est essentiel.' },
-									{ thread_id: 2, author: 'David', message: 'J\'ai signalé plusieurs annonces de ce type, mais elles réapparaissent souvent sous une autre forme.' },
+						{ thread_id: 3, author: 'Anna', message: 'Pour signaler un site frauduleux, vous pouvez passer par des plateformes comme Signal-Arnaques ou directement contacter les autorités.' },
+						{ thread_id: 3, author: 'Leo', message: 'Je recommande aussi d’utiliser des extensions de navigateur qui bloquent les sites suspects.' },
+						{ thread_id: 3, author: 'Maya', message: 'Est-ce que quelqu’un a déjà utilisé un service pour vérifier la sécurité d’un site ?' },
+						{ thread_id: 3, author: 'Tom', message: 'Oui, il existe des services comme VirusTotal pour scanner les URL et vérifier si elles sont sécurisées.' },
+						{ thread_id: 3, author: 'Nina', message: 'J\'ai récemment eu affaire à un site qui demandait des informations personnelles étranges. J’ai immédiatement quitté.' }
+					];
 
-									{ thread_id: 3, author: 'Anna', message: 'Pour signaler un site frauduleux, vous pouvez passer par des plateformes comme Signal-Arnaques ou directement contacter les autorités.' },
-									{ thread_id: 3, author: 'Leo', message: 'Je recommande aussi d’utiliser des extensions de navigateur qui bloquent les sites suspects.' },
-									{ thread_id: 3, author: 'Maya', message: 'Est-ce que quelqu’un a déjà utilisé un service pour vérifier la sécurité d’un site ?' },
-									{ thread_id: 3, author: 'Tom', message: 'Oui, il existe des services comme VirusTotal pour scanner les URL et vérifier si elles sont sécurisées.' },
-									{ thread_id: 3, author: 'Nina', message: 'J\'ai récemment eu affaire à un site qui demandait des informations personnelles étranges. J’ai immédiatement quitté.' }
-								];
-
-								exampleComments.forEach(comment => {
-									const insertComment = 'INSERT INTO comments (thread_id, author, message) VALUES (?, ?, ?)';
-									db.run(insertComment, [comment.thread_id, comment.author, comment.message], (err) => {
-										if (err) {
-											console.error(`Erreur lors de l'ajout du commentaire de ${comment.author} :`, err);
-										}
-									});
-								});
+					exampleComments.forEach(comment => {
+						const insertComment = 'INSERT INTO comments (thread_id, author, message) VALUES (?, ?, ?)';
+						db.run(insertComment, [comment.thread_id, comment.author, comment.message], (err) => {
+							if (err) {
+								console.error(`Erreur lors de l'ajout du commentaire de ${comment.author} :`, err);
 							}
 						});
 					});
