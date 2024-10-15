@@ -68,7 +68,7 @@
 						threadDiv.id = `thread-${thread.id}`;
                         threadDiv.innerHTML = `
                             <hr>
-                            <h3>${thread.title} <small>(${thread.commentCount || 0} commentaires)</small></h3>
+                            <h3>${thread.title} <small>(${thread.commentCount || 0} réponses)</small></h3>
                             <p>${formattedDate} - <strong>Auteur :</strong> ${thread.author}</p>
                             <p>${thread.message}</p>
                             <a href="#" id="reply-button-${thread.id}" onclick="toggleReplyForm(${thread.id})" class="button">Répondre</a>
@@ -161,7 +161,7 @@
             const author = document.getElementById(`comment-author-${threadId}`).value;
             const message = document.getElementById(`comment-message-${threadId}`).value;
 
-            fetch(`/api/threads/${threadId}/comments`, {
+            fetch(`/api/threads/${threadId}/add_comment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -171,7 +171,6 @@
             .then(response => response.json())
             .then(data => {
                 // loadComments(threadId); // Recharger les commentaires après l'ajout
-				// fetchThreads();
 				toggleReplyForm(threadId);
             })
             .catch(error => {
@@ -188,7 +187,7 @@
             const content = document.getElementById("message").value; // Contenu du message
 
             // Envoyer les données au serveur
-            fetch('/api/thread', {
+            fetch('/api/add_thread', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

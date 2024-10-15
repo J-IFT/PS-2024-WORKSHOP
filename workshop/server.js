@@ -1,156 +1,151 @@
 const express = require('express');
 const path = require('path');
-const mysql = require('mysql');
+const sqlite3 = require('sqlite3').verbose(); // Importer SQLite3
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const db = mysql.createConnection({
-    host: "127.0.0.1",
-    user: "root",
-    password: "root",
-    database: "cleanweb"
-});
+// Ouvrir ou créer la base de données SQLite
+const db = new sqlite3.Database('./cleanweb.db', (err) => {
+    if (err) {
+        console.error('Erreur lors de l\'ouverture de la base de données :', err);
+    } else {
+        console.log('Base de données SQLite connectée.');
 
-// Connecte-toi à MySQL
-db.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-
-    // Créer la base de données et les tables si elles n'existent pas
-    db.query("CREATE DATABASE IF NOT EXISTS cleanweb", function (err, result) {
-        if (err) throw err;
-        console.log("Database created");
-
-        // Utiliser la base de données
-        db.query("USE cleanweb", function (err) {
-            if (err) throw err;
-
-            // Supprimer les tables si elles existent pour réinitialiser à chaque démarrage
-            db.query("DROP TABLE IF EXISTS comments");
-            db.query("DROP TABLE IF EXISTS threads");
-
-            // Créer la table threads
-            const createThreadsTable = `
+        // Créer les tables si elles n'existent pas déjà
+        db.serialize(() => {
+            db.run(`
                 CREATE TABLE IF NOT EXISTS threads (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    author VARCHAR(255) NOT NULL,
-                    title VARCHAR(255) NOT NULL,
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    author TEXT NOT NULL,
+                    title TEXT NOT NULL,
                     message TEXT NOT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
-            `;
+            `);
 
-            const createCommentsTable = `
+            db.run(`
                 CREATE TABLE IF NOT EXISTS comments (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    thread_id INT,
-                    author VARCHAR(255) NOT NULL,
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    thread_id INTEGER,
+                    author TEXT NOT NULL,
                     message TEXT NOT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY (thread_id) REFERENCES threads(id) ON DELETE CASCADE
                 )
-            `;
+            `);
 
-            // Créer les tables et insérer les threads et commentaires par défaut
-            db.query(createThreadsTable, function (err) {
-                if (err) throw err;
-                console.log("Table 'threads' created");
+			// Vérifier si la base de données est vide avant d'insérer les threads par défaut
+			db.get('SELECT COUNT(*) AS count FROM threads', (err, row) => {
+				if (err) {
+					console.error('Erreur lors de la vérification de la base de données :', err);
+				} else if (row.count === 0) {
+					console.log('Base de données vide. Insertion des threads et commentaires par défaut.');
 
-                db.query(createCommentsTable, function (err) {
-                    if (err) throw err;
-                    console.log("Table 'comments' created");
+					// Insérer des threads d'exemple avec des commentaires variés
+					const exampleThreads = [
+						{ id: 1, author: 'Alice', title: 'Comment reconnaître un email de phishing ?', message: 'Je reçois de plus en plus d\'emails suspects. Quels sont les signes qui montrent qu\'un email est un phishing ?' },
+						{ id: 2, author: 'Bob', title: 'Arnaques sur les réseaux sociaux', message: 'J\'ai remarqué plusieurs annonces sur Facebook qui semblent être des arnaques. Quelqu\'un d\'autre a-t-il eu ce problème ?' },
+						{ id: 3, author: 'Claire', title: 'Signaler un site web douteux', message: 'J\'ai visité un site web qui semble frauduleux. Comment puis-je le signaler ?' }
+					];
 
-                    // Insérer des threads d'exemple
-                    const exampleThreads = [
-                        { author: 'Alice', title: 'Comment reconnaître un email de phishing ?', message: 'Je reçois de plus en plus d\'emails suspects. Quels sont les signes qui montrent qu\'un email est un phishing ?' },
-                        { author: 'Bob', title: 'Arnaques sur les réseaux sociaux', message: 'J\'ai remarqué plusieurs annonces sur Facebook qui semblent être des arnaques. Quelqu\'un d\'autre a-t-il eu ce problème ?' },
-                        { author: 'Claire', title: 'Signaler un site web douteux', message: 'J\'ai visité un site web qui semble frauduleux. Comment puis-je le signaler ?' }
-                    ];
+					exampleThreads.forEach((thread) => {
+						const insertThread = 'INSERT INTO threads (author, title, message) VALUES (?, ?, ?)';
+						db.run(insertThread, [thread.author, thread.title, thread.message], function (err) {
+							if (err) {
+								console.error('Erreur lors de l\'ajout du thread d\'exemple :', err);
+							} else {
+								const threadId = this.lastID; // Récupérer l'ID du thread ajouté
 
-                    exampleThreads.forEach((thread, index) => {
-                        const insertThread = 'INSERT INTO threads (author, title, message) VALUES (?, ?, ?)';
-                        db.query(insertThread, [thread.author, thread.title, thread.message], (err, result) => {
-                            if (err) throw err;
-                            console.log(`Thread ajouté : ${thread.title}`);
+								// Ajouter des commentaires pour chaque thread avec le champ thread_id
+								const exampleComments = [
+									{ thread_id: 1, author: 'John', message: 'C’est toujours difficile de détecter les emails suspects, il faut être très vigilant.' },
+									{ thread_id: 1, author: 'Sara', message: 'Merci pour ce sujet, je trouve ça vraiment utile. Les signes les plus clairs sont souvent les liens suspects et les pièces jointes inattendues.' },
+									{ thread_id: 1, author: 'Paul', message: 'La plupart du temps, les fautes d’orthographe ou les offres trop alléchantes sont des indices.' },
 
-                            const threadId = result.insertId; // Récupérer l'ID du thread ajouté
+									{ thread_id: 2, author: 'Emily', message: 'J\'ai aussi remarqué de nombreuses annonces frauduleuses sur Instagram. C\'est vraiment inquiétant.' },
+									{ thread_id: 2, author: 'Michael', message: 'Faites attention à ne pas cliquer sur ces liens, c’est souvent du phishing.' },
+									{ thread_id: 2, author: 'Laura', message: 'Les réseaux sociaux deviennent de plus en plus infestés par ces arnaques. Un signalement rapide est essentiel.' },
+									{ thread_id: 2, author: 'David', message: 'J\'ai signalé plusieurs annonces de ce type, mais elles réapparaissent souvent sous une autre forme.' },
 
-                            // Ajouter des commentaires par défaut pour chaque thread
-                            const exampleComments = [
-                                { author: 'John', message: 'Je pense que c\'est un bon conseil.', threadId: threadId },
-                                { author: 'Jane', message: 'Merci pour l\'information.', threadId: threadId }
-                            ];
+									{ thread_id: 3, author: 'Anna', message: 'Pour signaler un site frauduleux, vous pouvez passer par des plateformes comme Signal-Arnaques ou directement contacter les autorités.' },
+									{ thread_id: 3, author: 'Leo', message: 'Je recommande aussi d’utiliser des extensions de navigateur qui bloquent les sites suspects.' },
+									{ thread_id: 3, author: 'Maya', message: 'Est-ce que quelqu’un a déjà utilisé un service pour vérifier la sécurité d’un site ?' },
+									{ thread_id: 3, author: 'Tom', message: 'Oui, il existe des services comme VirusTotal pour scanner les URL et vérifier si elles sont sécurisées.' },
+									{ thread_id: 3, author: 'Nina', message: 'J\'ai récemment eu affaire à un site qui demandait des informations personnelles étranges. J’ai immédiatement quitté.' }
+								];
 
-                            exampleComments.forEach(comment => {
-                                const insertComment = 'INSERT INTO comments (thread_id, author, message) VALUES (?, ?, ?)';
-                                db.query(insertComment, [comment.threadId, comment.author, comment.message], (err) => {
-                                    if (err) throw err;
-                                    console.log(`Commentaire ajouté par ${comment.author} pour le thread ${thread.title}`);
-                                });
-                            });
-                        });
-                    });
-                });
-            });
+								exampleComments.forEach(comment => {
+									const insertComment = 'INSERT INTO comments (thread_id, author, message) VALUES (?, ?, ?)';
+									db.run(insertComment, [comment.thread_id, comment.author, comment.message], (err) => {
+										if (err) {
+											console.error(`Erreur lors de l'ajout du commentaire de ${comment.author} :`, err);
+										}
+									});
+								});
+							}
+						});
+					});
+				} else {
+					console.log('Base de données déjà peuplée.');
+				}
+			});
         });
-    });
+    }
 });
 
 // Route pour créer un nouveau thread
-app.post('/api/thread', (req, res) => {
+app.post('/api/add_thread', (req, res) => {
     const { author, title, message } = req.body;
 
-    // Vérifie si tous les champs sont fournis
     if (!author || !title || !message) {
         return res.status(400).json({ error: 'Tous les champs sont requis.' });
     }
 
     const query = 'INSERT INTO threads (author, title, message) VALUES (?, ?, ?)';
-
-    db.query(query, [author, title, message], (err, result) => {
+    db.run(query, [author, title, message], function(err) {
         if (err) {
             console.error('Erreur lors de la création du thread :', err);
             return res.status(500).send('Erreur serveur');
         }
         // Renvoyer le thread créé avec son ID
-        res.status(201).json({ id: result.insertId, author, title, message });
+        res.status(201).json({ id: this.lastID, author, title, message });
     });
 });
 
 // Route pour récupérer tous les threads
 app.get('/api/threads', (req, res) => {
-	const query = `
-		SELECT threads.*, COUNT(comments.id) AS commentCount
-		FROM threads
-		LEFT JOIN comments ON threads.id = comments.thread_id
-		GROUP BY threads.id
-		ORDER BY threads.created_at DESC
-	`;
-    db.query(query, (err, results) => {
+    const query = `
+        SELECT threads.*, COUNT(comments.id) AS commentCount
+        FROM threads
+        LEFT JOIN comments ON threads.id = comments.thread_id
+        GROUP BY threads.id
+        ORDER BY threads.created_at DESC
+    `;
+
+    db.all(query, [], (err, rows) => {
         if (err) {
             console.error('Erreur lors de la récupération des threads :', err);
             res.status(500).send('Erreur serveur');
         } else {
-            res.json(results);
+            res.json(rows);
         }
     });
 });
 
 // Route pour ajouter un commentaire à un thread
-app.post('/api/threads/:id/comments', (req, res) => {
+app.post('/api/threads/:id/add_comment', (req, res) => {
     const threadId = req.params.id;
     const { author, message } = req.body;
-    const query = 'INSERT INTO comments (thread_id, author, message) VALUES (?, ?, ?)';
 
-    db.query(query, [threadId, author, message], (err, result) => {
+    const query = 'INSERT INTO comments (thread_id, author, message) VALUES (?, ?, ?)';
+    db.run(query, [threadId, author, message], function(err) {
         if (err) {
             console.error('Erreur lors de l\'ajout du commentaire :', err);
-            res.status(500).send('Erreur serveur');
-        } else {
-            res.status(201).json({ message: 'Commentaire ajouté avec succès' });
+            return res.status(500).send('Erreur serveur');
         }
+        res.status(201).json({ id: this.lastID, author, message });
     });
 });
 
@@ -158,25 +153,17 @@ app.post('/api/threads/:id/comments', (req, res) => {
 app.get('/api/threads/:id', (req, res) => {
     const threadId = req.params.id;
 
-    // Récupérer le thread
-    db.query('SELECT * FROM threads WHERE id = ?', [threadId], (err, threadResult) => {
-        if (err || threadResult.length === 0) {
-            res.status(404).send('Thread non trouvé');
-            return;
+    db.get('SELECT * FROM threads WHERE id = ?', [threadId], (err, thread) => {
+        if (err || !thread) {
+            return res.status(404).send('Thread non trouvé');
         }
 
-        // Récupérer les commentaires associés au thread
-        db.query('SELECT * FROM comments WHERE thread_id = ?', [threadId], (err, commentResults) => {
+        db.all('SELECT * FROM comments WHERE thread_id = ?', [threadId], (err, comments) => {
             if (err) {
                 console.error('Erreur lors de la récupération des commentaires :', err);
-                res.status(500).send('Erreur serveur');
-            } else {
-                // Envoyer le thread et ses commentaires
-                res.json({
-                    thread: threadResult[0],
-                    comments: commentResults
-                });
+                return res.status(500).send('Erreur serveur');
             }
+            res.json({ thread, comments });
         });
     });
 });
