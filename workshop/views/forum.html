@@ -18,7 +18,7 @@
                 <li><a href="forum.html">Forum</a></li>
                 <li><a href="atelier.html">Atelier</a></li>
             </ul>
-        </nav>        
+        </nav>
     </header>
 
     <!-- Section Forum -->
@@ -28,40 +28,21 @@
 
         <!-- Formulaire pour créer un nouveau sujet -->
         <h2>Ouvrir une nouvelle conversation</h2>
-        <form id="new-topic-form">
+        <form id="new-topic-form"  onsubmit="addThread(event);">
             <label for="author">Prénom :</label>
             <input type="text" id="author" name="author" placeholder="Votre prénom" required>
-            
+
             <label for="title">Titre :</label>
             <input type="text" id="title" name="title" placeholder="Titre du sujet" required>
-        
+
             <label for="message">Message :</label>
             <textarea id="message" name="message" placeholder="Écrivez votre message ici" required></textarea>
-        
+
             <button type="submit">Créer le sujet</button>
-        </form>               
+        </form>
 
         <h2>Conversations en cours</h2>
-        <div class="forum-topic">
-            <h3>Comment reconnaître un email de phishing ?</h3>
-            <p><strong>Auteur :</strong> Alice</p>
-            <p>Je reçois de plus en plus d'emails suspects. Quels sont les signes qui montrent qu'un email est un phishing ?</p>
-            <a href="#" class="button">Répondre</a>
-        </div>
-
-        <div class="forum-topic">
-            <h3>Arnaques sur les réseaux sociaux</h3>
-            <p><strong>Auteur :</strong> Bob</p>
-            <p>J'ai remarqué plusieurs annonces sur Facebook qui semblent être des arnaques. Quelqu'un d'autre a-t-il eu ce problème ?</p>
-            <a href="#" class="button">Répondre</a>
-        </div>
-
-        <div class="forum-topic">
-            <h3>Signaler un site web douteux</h3>
-            <p><strong>Auteur :</strong> Claire</p>
-            <p>J'ai visité un site web qui semble frauduleux. Comment puis-je le signaler ?</p>
-            <a href="#" class="button">Répondre</a>
-        </div>
+        <div id="threads"></div>
     </section>
 
     <!-- Footer -->
@@ -70,5 +51,167 @@
     </footer>
 
     <script src="/js/app.js"></script>
+    <script>
+        // Fonction pour récupérer et afficher les threads
+        function fetchThreads() {
+            fetch('/api/threads')
+                .then(response => response.json())
+                .then(threads => {
+                    const threadsDiv = document.getElementById('threads');
+                    threadsDiv.innerHTML = ''; // Vider les threads précédents
+                    threads.forEach(thread => {
+                        const threadDiv = document.createElement('div');
+                        threadDiv.className = 'forum-topic';
+
+                        // Formatage de la date
+                        const date = new Date(thread.created_at);
+                        const formattedDate = `${date.toLocaleDateString()} à ${date.toLocaleTimeString()}`;
+						threadDiv.id = `thread-${thread.id}`;
+                        threadDiv.innerHTML = `
+                            <hr>
+                            <h3>${thread.title} <small>(${thread.commentCount || 0} commentaires)</small></h3>
+                            <p>${formattedDate} - <strong>Auteur :</strong> ${thread.author}</p>
+                            <p>${thread.message}</p>
+                            <a href="#" id="reply-button-${thread.id}" onclick="toggleReplyForm(${thread.id})" class="button">Répondre</a>
+                            <div id="comments-container-${thread.id}" style="display:none; max-height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; margin-top: 10px; margin-bottom: 10px;">
+                                <!-- Les commentaires seront chargés ici -->
+                            </div>
+                            <div id="reply-form-${thread.id}" style="display:none;">
+                                <form onsubmit="addComment(${thread.id}); return false;" id="new-topic-form">
+                                    <label for="comment-author-${thread.id}">Votre nom :</label>
+                                    <input type="text" id="comment-author-${thread.id}" placeholder="Votre prénom" required>
+                                    <label for="comment-message-${thread.id}">Votre message :</label>
+                                    <textarea id="comment-message-${thread.id}" placeholder="Votre réponse" required></textarea>
+                                    <button type="submit">Envoyer</button>
+                                </form>
+                            </div>
+                        `;
+                        threadsDiv.appendChild(threadDiv);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des threads :', error);
+                });
+        }
+
+        // Fonction pour afficher/masquer le formulaire de réponse et charger les commentaires
+        function toggleReplyForm(threadId) {
+            // Masquer tous les autres formulaires et afficher les boutons "Répondre"
+            const forms = document.querySelectorAll('[id^="reply-form-"]');
+            const buttons = document.querySelectorAll('[id^="reply-button-"]');
+            const commentsContainers = document.querySelectorAll('[id^="comments-container-"]');
+            forms.forEach(form => form.style.display = 'none');
+            buttons.forEach(button => button.style.display = 'inline-block');
+            commentsContainers.forEach(container => container.style.display = 'none');
+
+            // Afficher le formulaire et masquer le bouton "Répondre"
+            const form = document.getElementById(`reply-form-${threadId}`);
+            const button = document.getElementById(`reply-button-${threadId}`);
+            form.style.display = 'block';
+            button.style.display = 'none';
+
+            // Afficher les commentaires et les charger s'ils existent
+            const commentsContainer = document.getElementById(`comments-container-${threadId}`);
+            commentsContainer.style.display = 'block';
+            loadComments(threadId); // Charger les commentaires
+
+			// Faire défiler la page jusqu'à la div du thread
+			const threadDiv = document.getElementById(`thread-${threadId}`); // Assurez-vous que chaque div de thread a un ID unique
+			console.log(`ID du thread à défiler : thread-${threadId}`); // Log pour débogage
+			if (threadDiv) {
+				// Utiliser scrollIntoView pour défiler en douceur vers le thread
+				setTimeout(() => {
+					threadDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}, 100); // Ajuste le délai si nécessaire
+			} else {
+				console.error(`Div du thread avec ID ${threadId} non trouvée.`);
+			}
+        }
+
+        // Fonction pour charger les commentaires d'un thread
+        function loadComments(threadId) {
+            fetch(`/api/threads/${threadId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const commentsContainer = document.getElementById(`comments-container-${threadId}`);
+                    const { comments } = data;
+                    commentsContainer.innerHTML = ''; // Vider les anciens commentaires
+                    if (comments.length > 0) {
+                        comments.forEach(comment => {
+                            const commentDiv = document.createElement('div');
+                            commentDiv.className = 'comment';
+                            commentDiv.innerHTML = `
+                                <p><strong>${comment.author}</strong> (${new Date(comment.created_at).toLocaleString()})</p>
+                                <p>${comment.message}</p>
+                                <hr>
+                            `;
+                            commentsContainer.appendChild(commentDiv);
+                        });
+						commentsContainer.scrollTop = commentsContainer.scrollHeight;
+                    } else {
+                        commentsContainer.innerHTML = '<p>Aucun commentaire pour le moment.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des commentaires :', error);
+                });
+        }
+
+        // Fonction pour ajouter un commentaire à un thread
+        function addComment(threadId) {
+            const author = document.getElementById(`comment-author-${threadId}`).value;
+            const message = document.getElementById(`comment-message-${threadId}`).value;
+
+            fetch(`/api/threads/${threadId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ author, message }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // loadComments(threadId); // Recharger les commentaires après l'ajout
+				// fetchThreads();
+				toggleReplyForm(threadId);
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'ajout du commentaire :', error);
+            });
+        }
+
+		// Fonction pour ajouter un nouveau thread
+		function addThread(event) {
+            event.preventDefault(); // Empêche la soumission du formulaire
+
+            const author = document.getElementById("author").value; // Récupère le prénom
+            const title = document.getElementById("title").value; // Titre du sujet
+            const content = document.getElementById("message").value; // Contenu du message
+
+            // Envoyer les données au serveur
+            fetch('/api/thread', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ author, title, message: content }) // Construire le corps de la requête
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la création du thread');
+                }
+                return response.json(); // Retourner la réponse JSON
+            })
+            .then(data => {
+				fetchThreads();
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'ajout du thread :', error);
+            });
+        }
+
+        // Charger les threads au chargement de la page
+        fetchThreads();
+    </script>
 </body>
 </html>
