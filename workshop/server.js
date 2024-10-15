@@ -20,6 +20,16 @@ app.get('/article1.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'article1.html'));
 });
 
+// Route pour la page des sous articles
+app.get('/article2.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'article2.html'));
+});
+
+// Route pour la page des sous articles
+app.get('/article3.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'article3.html'));
+});
+
 // Route pour la page du forum
 app.get('/forum.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'forum.html'));
