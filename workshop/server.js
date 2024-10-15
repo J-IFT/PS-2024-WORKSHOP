@@ -50,6 +50,11 @@ app.get('/arnaque.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'arnaque.html'));
 });
 
+// Route pour la page aide
+app.get('/aide.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'aide.html'));
+});
+
 // Lancer le serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
