@@ -233,3 +233,8 @@ ul li {
     max-width: 150px; /* Ajustez cette valeur selon la taille de votre logo */
     height: auto;
 }
+
+img {
+    max-width: 100%;  /* S'assure que l'image ne dépasse pas la largeur de son conteneur */
+    height: auto;     /* Maintient le ratio d'aspect de l'image */
+}
