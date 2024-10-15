@@ -11,38 +11,42 @@
     <!-- Header avec la navigation -->
     <header>
         <h1>Gardiens du Web</h1>
+        <img src="images/logo.png" alt="Logo de Gardiens du Web" class="logo">
         <nav>
             <ul>
-                <li><a href="/">Accueil</a></li>
-                <li><a href="article.html">Articles</a></li>
-                <li><a href="forum.html">Forum</a></li>
-                <li><a href="atelier.html">Atelier</a></li>
+                <li><a href="/">Accueil 🏠</a></li>
+                <li><a href="article.html">Articles 📖</a></li>
+                <li><a href="forum.html">Forum 💬</a></li>
+                <li><a href="atelier.html">Ateliers 🛠️</a></li>
+                <li><a href="aide.html">Aide ❓</a></li>
             </ul>
-        </nav>
+        </nav>        
     </header>
 
     <!-- Section Forum -->
     <section id="forum" class="content-section">
-        <h1>Forum de Discussion</h1>
-        <p>Partagez vos expériences et discutez des arnaques et du phishing avec la communauté.</p>
+        <h1>Forum de Discussion 💬</h1>
+        <p>Partagez vos expériences et discutez des arnaques et du phishing avec la communauté. 🛡️</p>
 
         <!-- Formulaire pour créer un nouveau sujet -->
-        <h2>Ouvrir une nouvelle conversation</h2>
-        <form id="new-topic-form"  onsubmit="addThread(event);">
+        <h2>Ouvrir une nouvelle conversation ✍️</h2>
+        <form id="new-topic-form" onsubmit="addThread(event);">
             <label for="author">Prénom :</label>
-            <input type="text" id="author" name="author" placeholder="Votre prénom" required>
+            <input type="text" id="author" name="author" placeholder="Votre prénom 😊" required>
 
             <label for="title">Titre :</label>
-            <input type="text" id="title" name="title" placeholder="Titre du sujet" required>
+            <input type="text" id="title" name="title" placeholder="Titre du sujet 📝" required>
 
             <label for="message">Message :</label>
-            <textarea id="message" name="message" placeholder="Écrivez votre message ici" required></textarea>
+            <textarea id="message" name="message" placeholder="Écrivez votre message ici 🖋️" required></textarea>
 
-            <button type="submit">Créer le sujet</button>
+            <button type="submit">Créer le sujet 🚀</button>
         </form>
 
-        <h2>Conversations en cours</h2>
+        <h2>Conversations en cours 🔄</h2>
         <div id="threads"></div>
+
+        <a href="/" class="button">Retour à l'accueil 🔙</a>
     </section>
 
     <!-- Footer -->
@@ -69,7 +73,7 @@
 						threadDiv.id = `thread-${thread.id}`;
                         threadDiv.innerHTML = `
                             <hr>
-                            <h3>${thread.title} <small>(${thread.commentCount || 0} commentaires)</small></h3>
+                            <h3>${thread.title} <small>(${thread.commentCount || 0} réponses)</small></h3>
                             <p>${formattedDate} - <strong>Auteur :</strong> ${thread.author}</p>
                             <p>${thread.message}</p>
                             <a href="#" id="reply-button-${thread.id}" onclick="toggleReplyForm(${thread.id})" class="button">Répondre</a>
@@ -162,7 +166,7 @@
             const author = document.getElementById(`comment-author-${threadId}`).value;
             const message = document.getElementById(`comment-message-${threadId}`).value;
 
-            fetch(`/api/threads/${threadId}/comments`, {
+            fetch(`/api/threads/${threadId}/add_comment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -172,7 +176,6 @@
             .then(response => response.json())
             .then(data => {
                 // loadComments(threadId); // Recharger les commentaires après l'ajout
-				// fetchThreads();
 				toggleReplyForm(threadId);
             })
             .catch(error => {
@@ -189,7 +192,7 @@
             const content = document.getElementById("message").value; // Contenu du message
 
             // Envoyer les données au serveur
-            fetch('/api/thread', {
+            fetch('/api/add_thread', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
