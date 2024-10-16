@@ -207,6 +207,20 @@ ul li {
     outline: none; /* Suppression du contour par défaut */
 }
 
+/* Champ de saisie (text, email, url) et textarea */
+#new-topic-form input[type="text"],
+#new-topic-form input[type="email"],
+#new-topic-form input[type="url"],
+#new-topic-form textarea {
+    width: calc(100% - 24px); /* Prendre toute la largeur, moins les marges */
+    padding: 12px; /* Espacement interne */
+    margin-bottom: 15px;
+    border: 1px solid #1e88e5; /* Bordure bleu vif */
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box; /* Gère correctement les marges et padding */
+}
+
 /* Styles pour le bouton */
 #new-topic-form button {
     background-color: #1e88e5; /* Bleu vif */
