@@ -19,10 +19,12 @@ cyberharcèlement, désinformation, diffamation, addiction… sont autant de dan
 Votre objectif pour ce workshop est d’approfondir ce sujet et proposer une solution technique innovante qui analyse la problématique et propose des solutions :
 L'assainissement des réseaux sociaux est un défi complexe qui nécessite une approche multidimensionnelle. Voici quelques pistes de réflexion : Outils de Signalement, les algorithmes de filtrages, l’authentification et la vérification, l'éducation et la sensibilisation, IA et machine Learning pour détecter automatiquement les contenus inappropriés, les outils pour le traitement du langage naturel.
 
+Lien : https://ps-2024-workshop-git-main-j-ifts-projects.vercel.app/
+
 ### 💻 Applications et langages utilisés :
 
-+ Visual studio code
-+ HTML, CSS
++ Visual studio code, Tidio, Vercel
++ HTML, CSS, JS, Node.js
 
 
 ## 🌸 Merci !
